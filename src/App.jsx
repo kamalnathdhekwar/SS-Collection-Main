@@ -8,8 +8,6 @@ import Hero_Section from './components/Hero-Section/Hero-Section'
 import Footer from './components/Footer/Footer'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
       <div className="">
@@ -26,4 +24,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
