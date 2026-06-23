@@ -1,27 +1,20 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
-import Header from './components/Header/Header'
-import Hero_Section from './components/Hero-Section/Hero-Section'
-import Footer from './components/Footer/Footer'
+import React from 'react';
+import LoginPage from './components/LoginPage/LoginPage';
+import Footer from './components/Footer/Footer';
 
 function App() {
   return (
-    <>
-      <div className="">
-        <Header />
-      </div>
-       <div className="">
-        <Hero_Section />
-      </div>
-       <div className="">
-        <Footer />
-      </div>
+    <div className="w-full min-h-screen bg-white flex flex-col justify-between antialiased overflow-x-hidden">
       
-    </>
-  )
+      {/* Central E-Commerce Form Focus Area */}
+      <main className="flex-grow flex flex-col justify-center">
+        <LoginPage />
+      </main>
+      
+      {/* Structural Amazon/Flipkart Baseline Footer */}
+      <Footer />
+    </div>
+  );
 }
 
 export default App;
