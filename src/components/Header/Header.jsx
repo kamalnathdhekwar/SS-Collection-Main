@@ -60,13 +60,15 @@ function Header({ onViewChange }) {
             {/* Wishlist */}
             <button className="flex items-center gap-1 hover:text-blue-600 transition">
               <FaHeart />
-              <span className="hidden sm:inline">Wishlist</span>
+              {/* FIXED: Removed hidden sm:inline so text is always visible */}
+              <span>Wishlist</span>
             </button>
 
             {/* Cart */}
             <button className="flex items-center gap-1 hover:text-blue-600 transition">
               <FaShoppingCart />
-              <span className="hidden sm:inline">Cart</span>
+              {/* FIXED: Removed hidden sm:inline so text is always visible */}
+              <span>Cart</span>
             </button>
 
             {/* 3. ACCOUNT: Triggers the same view state when clicked */}
@@ -75,7 +77,8 @@ function Header({ onViewChange }) {
               className="flex items-center gap-1 text-neutral-600 hover:text-blue-600 transition cursor-pointer font-medium"
             >
               <FaUser />
-              <span className="hidden sm:inline">Account</span>
+              {/* FIXED: Removed hidden sm:inline so text is always visible */}
+              <span>Account</span>
             </button>
 
           </div>
