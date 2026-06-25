@@ -28,9 +28,9 @@ function Header({ onViewChange }) {
 
           {/* 2. FIXED LOGO: Wrapped both title and subtitle inside a single div container inside the action button */}
           <button 
-            onClick={() => onViewChange('login')}
+            onClick={() => onViewChange('home')}
             className="flex flex-col text-left focus:outline-none cursor-pointer group select-none flex-shrink-0"
-            aria-label="Navigate to Login"
+            aria-label="Navigate to Home"
           >
             <div className="flex flex-col text-left">
               <h1 className="text-lg sm:text-2xl font-black tracking-tight text-neutral-900 uppercase transition-opacity group-hover:opacity-80">
@@ -88,7 +88,7 @@ function Header({ onViewChange }) {
 
       {/* Navigation Menu */}
       <div className="bg-white border-b border-neutral-200">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 pb-1">
 
           <ul 
             className={`flex flex-col md:flex-row items-center gap-6 md:gap-10 text-sm font-medium text-neutral-700
