@@ -55,30 +55,27 @@ function Header({ onViewChange }) {
           </div>
 
           {/* User Actions */}
-          <div className="flex items-center justify-end gap-2 sm:gap-4 text-xs sm:text-sm font-medium flex-shrink-0">
+          <div className="flex items-center justify-end gap-2 md:gap-4 text-xs md:text-sm font-medium flex-shrink-0">
 
             {/* Wishlist */}
-            <button className="flex items-center gap-1 hover:text-blue-600 transition">
-              <FaHeart />
-              {/* FIXED: Removed hidden sm:inline so text is always visible */}
-              <span>Wishlist</span>
+            <button className="flex items-center gap-0.5 md:gap-2 hover:text-blue-600 transition px-0.5 md:px-0">
+              <FaHeart className="text-base md:text-base" />
+              <span className="hidden md:inline">Wishlist</span>
             </button>
 
             {/* Cart */}
-            <button className="flex items-center gap-1 hover:text-blue-600 transition">
-              <FaShoppingCart />
-              {/* FIXED: Removed hidden sm:inline so text is always visible */}
-              <span>Cart</span>
+            <button className="flex items-center gap-0.5 md:gap-2 hover:text-blue-600 transition px-0.5 md:px-0">
+              <FaShoppingCart className="text-base md:text-base" />
+              <span className="hidden md:inline">Cart</span>
             </button>
 
             {/* 3. ACCOUNT: Triggers the same view state when clicked */}
             <button 
               onClick={() => onViewChange('login')} 
-              className="flex items-center gap-1 text-neutral-600 hover:text-blue-600 transition cursor-pointer font-medium"
+              className="flex items-center gap-0.5 md:gap-2 text-neutral-600 hover:text-blue-600 transition cursor-pointer font-medium px-0.5 md:px-0"
             >
-              <FaUser />
-              {/* FIXED: Removed hidden sm:inline so text is always visible */}
-              <span>Account</span>
+              <FaUser className="text-base md:text-base" />
+              <span className="hidden md:inline">Account</span>
             </button>
 
           </div>
