@@ -1,4 +1,4 @@
-import React, { useState } from "react"; 
+import React, { useEffect, useRef, useState } from "react"; 
 
 import {
   FaPhoneAlt,
@@ -8,11 +8,84 @@ import {
   FaShoppingCart,
   FaUser,
   FaSearch,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 
 // 1. Destructure the onViewChange prop from your parent App component
 function Header({ onViewChange }) {
   const [menuOpen, setMenuOpen] = useState(false); // making it responsive
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const navRef = useRef(null);
+
+  const toggleDropdown = (name) => {
+    setActiveDropdown((prev) => (prev === name ? null : name));
+  };
+
+  const closeDropdown = () => {
+    setActiveDropdown(null);
+  };
+
+  const closeAllMenus = () => {
+    setMenuOpen(false);
+    closeDropdown();
+  };
+
+  const footwearItems = [
+    "Running Shoes",
+    "Casual Shoes",
+    "Sneakers",
+    "Sports Shoes",
+    "Sandals & Slippers",
+  ];
+  const clothingItems = [
+    "T-Shirts",
+    "Shirts",
+    "Jeans",
+    "Shorts",
+    "Track Pants",
+    "Jackets",
+    "Sportswear",
+    "Men's Fashion",
+    "Women's Fashion",
+  ];
+  const sportsEquipmentItems = [
+    "Cricket Bats",
+    "Cricket Balls",
+    "Batting Pads",
+    "Gloves",
+    "Badminton Rackets",
+    "Shuttlecocks",
+    "Footballs",
+    "Volleyballs",
+  ];
+  const accessoriesItems = [
+    "Sunglasses",
+    "Caps",
+    "Socks",
+    "Wallets",
+    "Belts",
+    "Bags",
+  ];
+  const brandsItems = [
+    "Nike",
+    "Puma",
+    "Reebok",
+    "Raymond",
+    "Levi's",
+    "Other Premium Brands",
+  ];
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        closeAllMenus();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-lg">
@@ -25,6 +98,18 @@ function Header({ onViewChange }) {
       {/* Main Navbar */}
       <div className="bg-white border-b border-neutral-200">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4 w-full">
+
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              setMenuOpen(!menuOpen);
+            }}
+            className="md:hidden flex items-center justify-center text-neutral-700 hover:text-blue-600 transition focus:outline-none"
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+          >
+            {menuOpen ? <FaTimes className="text-xl" /> : <FaBars className="text-xl" />}
+          </button>
 
           {/* 2. FIXED LOGO: Wrapped both title and subtitle inside a single div container inside the action button */}
           <button 
@@ -72,7 +157,7 @@ function Header({ onViewChange }) {
             {/* 3. ACCOUNT: Triggers the same view state when clicked */}
             <button 
               onClick={() => onViewChange('login')} 
-              className="flex items-center gap-0.5 md:gap-2 text-neutral-600 hover:text-blue-600 transition cursor-pointer font-medium px-0.5 md:px-0"
+              className="flex items-center gap-0.5 md:gap-2 text-neutral-900 hover:text-blue-600 transition cursor-pointer font-medium px-0.5 md:px-0"
             >
               <FaUser className="text-base md:text-base" />
               <span className="hidden md:inline">Account</span>
@@ -87,62 +172,157 @@ function Header({ onViewChange }) {
       <div className="bg-white border-b border-neutral-200">
         <div className="max-w-7xl mx-auto px-4 pb-1">
 
-          <ul 
+          <ul ref={navRef}
             className={`flex flex-col md:flex-row items-center gap-6 md:gap-10 text-sm font-medium text-neutral-700
             absolute md:static bg-white md:bg-transparent w-full md:w-auto left-0 top-[140px] md:top-auto px-4 md:px-0 py-4 md:py-0 shadow-md md:shadow-none
             transition-all duration-300 ease-in-out
             ${menuOpen ? "opacity-100 visible" : "opacity-0 invisible md:opacity-100 md:visible"}`}
           >
             {/* Added a toggle back to home view on click if required later */}
-            <li onClick={() => { setMenuOpen(false); onViewChange('home'); }}
+            <li onClick={() => { closeAllMenus(); onViewChange('home'); }}
                 className="relative group cursor-pointer hover:text-blue-600 transition">
               Home
               <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </li>
 
-            <li onClick={() => setMenuOpen(false)}
-                className="relative group cursor-pointer hover:text-blue-600 transition flex items-center gap-1">
-              Footwear
-              <span className="text-xs transition-transform duration-300 group-hover:rotate-180">▼</span>
+            <li className="relative group">
+              <button
+                type="button"
+                onClick={() => toggleDropdown("footwear")}
+                className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition focus:outline-none"
+              >
+                Footwear
+                <span className={`text-xs transition-transform duration-300 ${activeDropdown === "footwear" ? "rotate-180" : ""}`}>▼</span>
+              </button>
               <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+
+              <div className={`overflow-hidden transition-all duration-300 ease-in-out ${activeDropdown === "footwear" ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
+                <ul className="absolute left-0 top-full mt-2 w-48 rounded-md border border-neutral-200 bg-white p-2 shadow-lg z-20">
+                  {footwearItems.map((item) => (
+                    <li
+                      key={item}
+                      onClick={closeDropdown}
+                      className="cursor-pointer rounded-md px-3 py-2 text-sm text-neutral-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600 hover:translate-x-1"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </li>
 
-            <li onClick={() => setMenuOpen(false)}
-                 className="relative group cursor-pointer hover:text-blue-600 transition flex items-center gap-1">
-              Clothing
-              <span className="text-xs transition-transform duration-300 group-hover:rotate-180">▼</span>
+            <li className="relative group">
+              <button
+                type="button"
+                onClick={() => toggleDropdown("clothing")}
+                className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition focus:outline-none"
+              >
+                Clothing
+                <span className={`text-xs transition-transform duration-300 ${activeDropdown === "clothing" ? "rotate-180" : ""}`}>▼</span>
+              </button>
               <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+
+              <div className={`overflow-hidden transition-all duration-300 ease-in-out ${activeDropdown === "clothing" ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
+                <ul className="absolute left-0 top-full mt-2 w-48 rounded-md border border-neutral-200 bg-white p-2 shadow-lg z-20">
+                  {clothingItems.map((item) => (
+                    <li
+                      key={item}
+                      onClick={closeDropdown}
+                      className="cursor-pointer rounded-md px-3 py-2 text-sm text-neutral-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600 hover:translate-x-1"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </li>
 
-            <li onClick={() => setMenuOpen(false)}
-                 className="relative group cursor-pointer hover:text-blue-600 transition flex items-center gap-1">
-              Sports Equipment
-              <span className="text-xs transition-transform duration-300 group-hover:rotate-180">▼</span>
+            <li className="relative group">
+              <button
+                type="button"
+                onClick={() => toggleDropdown("sports")}
+                className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition focus:outline-none"
+              >
+                Sports Equipment
+                <span className={`text-xs transition-transform duration-300 ${activeDropdown === "sports" ? "rotate-180" : ""}`}>▼</span>
+              </button>
               <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+
+              <div className={`overflow-hidden transition-all duration-300 ease-in-out ${activeDropdown === "sports" ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
+                <ul className="absolute left-0 top-full mt-2 w-48 rounded-md border border-neutral-200 bg-white p-2 shadow-lg z-20">
+                  {sportsEquipmentItems.map((item) => (
+                    <li
+                      key={item}
+                      onClick={closeDropdown}
+                      className="cursor-pointer rounded-md px-3 py-2 text-sm text-neutral-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600 hover:translate-x-1"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </li>
 
-            <li onClick={() => setMenuOpen(false)}
-                 className="relative group cursor-pointer hover:text-blue-600 transition flex items-center gap-1">
-              Accessories
-              <span className="text-xs transition-transform duration-300 group-hover:rotate-180">▼</span>
+            <li className="relative group">
+              <button
+                type="button"
+                onClick={() => toggleDropdown("accessories")}
+                className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition focus:outline-none"
+              >
+                Accessories
+                <span className={`text-xs transition-transform duration-300 ${activeDropdown === "accessories" ? "rotate-180" : ""}`}>▼</span>
+              </button>
               <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+
+              <div className={`overflow-hidden transition-all duration-300 ease-in-out ${activeDropdown === "accessories" ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
+                <ul className="absolute left-0 top-full mt-2 w-48 rounded-md border border-neutral-200 bg-white p-2 shadow-lg z-20">
+                  {accessoriesItems.map((item) => (
+                    <li
+                      key={item}
+                      onClick={closeDropdown}
+                      className="cursor-pointer rounded-md px-3 py-2 text-sm text-neutral-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600 hover:translate-x-1"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </li>
 
-            <li onClick={() => setMenuOpen(false)}
-                 className="relative group cursor-pointer hover:text-blue-600 transition flex items-center gap-1">
-              Brands
-              <span className="text-xs transition-transform duration-300 group-hover:rotate-180">▼</span>
+            <li className="relative group">
+              <button
+                type="button"
+                onClick={() => toggleDropdown("brands")}
+                className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition focus:outline-none"
+              >
+                Brands
+                <span className={`text-xs transition-transform duration-300 ${activeDropdown === "brands" ? "rotate-180" : ""}`}>▼</span>
+              </button>
               <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+
+              <div className={`overflow-hidden transition-all duration-300 ease-in-out ${activeDropdown === "brands" ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
+                <ul className="absolute left-0 top-full mt-2 w-48 rounded-md border border-neutral-200 bg-white p-2 shadow-lg z-20">
+                  {brandsItems.map((item) => (
+                    <li
+                      key={item}
+                      onClick={closeDropdown}
+                      className="cursor-pointer rounded-md px-3 py-2 text-sm text-neutral-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600 hover:translate-x-1"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </li>
 
-            <li onClick={() => setMenuOpen(false)}
+            <li onClick={closeAllMenus}
                  className="relative group cursor-pointer hover:text-blue-600 transition flex items-center gap-1">
               Stores
               <span className="text-xs transition-transform duration-300 group-hover:rotate-180">▼</span>
               <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </li>
 
-            <li onClick={() => setMenuOpen(false)}
+            <li onClick={closeAllMenus}
                 className="relative group cursor-pointer hover:text-blue-600 transition">
               Contact
               <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
