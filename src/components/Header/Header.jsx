@@ -22,6 +22,15 @@ function Header({ onViewChange }) {
     setActiveDropdown((prev) => (prev === name ? null : name));
   };
 
+  // Hover handlers: open on hover, close when leaving the item+dropdown
+  const handleMouseEnter = (name) => {
+    setActiveDropdown(name);
+  };
+
+  const handleMouseLeave = (name) => {
+    setActiveDropdown((prev) => (prev === name ? null : prev));
+  };
+
   const closeDropdown = () => {
     setActiveDropdown(null);
   };
@@ -185,7 +194,7 @@ function Header({ onViewChange }) {
               <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </li>
 
-            <li className="relative group">
+            <li className="relative group" onMouseEnter={() => handleMouseEnter("footwear")} onMouseLeave={() => handleMouseLeave("footwear")}>
               <button
                 type="button"
                 onClick={() => toggleDropdown("footwear")}
@@ -211,7 +220,7 @@ function Header({ onViewChange }) {
               </div>
             </li>
 
-            <li className="relative group">
+            <li className="relative group" onMouseEnter={() => handleMouseEnter("clothing")} onMouseLeave={() => handleMouseLeave("clothing")}>
               <button
                 type="button"
                 onClick={() => toggleDropdown("clothing")}
@@ -237,7 +246,7 @@ function Header({ onViewChange }) {
               </div>
             </li>
 
-            <li className="relative group">
+            <li className="relative group" onMouseEnter={() => handleMouseEnter("sports")} onMouseLeave={() => handleMouseLeave("sports")}>
               <button
                 type="button"
                 onClick={() => toggleDropdown("sports")}
@@ -263,7 +272,7 @@ function Header({ onViewChange }) {
               </div>
             </li>
 
-            <li className="relative group">
+            <li className="relative group" onMouseEnter={() => handleMouseEnter("accessories")} onMouseLeave={() => handleMouseLeave("accessories")}>
               <button
                 type="button"
                 onClick={() => toggleDropdown("accessories")}
@@ -289,7 +298,7 @@ function Header({ onViewChange }) {
               </div>
             </li>
 
-            <li className="relative group">
+            <li className="relative group" onMouseEnter={() => handleMouseEnter("brands")} onMouseLeave={() => handleMouseLeave("brands")}>
               <button
                 type="button"
                 onClick={() => toggleDropdown("brands")}
