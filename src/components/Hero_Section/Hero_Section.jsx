@@ -68,6 +68,7 @@ function Hero_Section() {
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) =>
