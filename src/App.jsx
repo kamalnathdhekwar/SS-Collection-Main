@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Hero_Section from './components/Hero_Section/Hero_Section';
+import ProductsMain from './components/Products/ProductsMain';
 import AddToCart from './components/addToCart/addToCart';
 import LoginPage from './components/LoginPage/LoginPage';
 
@@ -12,7 +13,6 @@ function App() {
 
   return (
     <div className="w-full min-h-screen bg-white flex flex-col justify-between antialiased overflow-x-hidden">
-
       <Header onViewChange={setCurrentView} />
 
       <main className="flex-1">
@@ -21,6 +21,7 @@ function App() {
         ) : (
           <>
             <Hero_Section />
+            <ProductsMain />
             {/* <AddToCart /> */}
           </>
         )}
