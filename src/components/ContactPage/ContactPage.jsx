@@ -14,7 +14,7 @@ export default function ContactPage() {
 
   return (
 
-      <div className="w-full bg-neutral-50 py-12 px-4 font-sans text-neutral-800">
+      <div className="w-full bg-neutral-50 pt-[160px] md:pt-[140px] pb-12 px-4 font-sans text-neutral-800">
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
         
         {/* Left Support Deck Info */}
