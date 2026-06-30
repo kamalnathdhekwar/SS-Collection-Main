@@ -18,7 +18,7 @@ export default function LoginPage() {
   };
 
   return (
-    // FIXED: Added specific top padding (pt-[160px] on mobile, md:pt-[140px] on desktop) to handle fixed header overlap elegantly
+    // FIXED: Specific top padding (pt-[160px] on mobile, md:pt-[140px] on desktop) to handle fixed header overlap elegantly
     <div className="flex-grow w-full flex flex-col items-center justify-center px-4 pt-[160px] md:pt-[140px] pb-12 font-sans bg-white">
       
       {/* Central Isolated Authentication Deck */}
