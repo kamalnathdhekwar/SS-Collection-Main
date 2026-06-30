@@ -18,7 +18,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex-grow w-full flex flex-col items-center justify-center px-4 py-12 md:py-20 font-sans bg-white">
+    <div className="flex-grow w-full flex flex-col items-center justify-center px-4 py-12 md:py-20 font-sans bg-white mt-36">
       
       {/* Central Isolated Authentication Deck */}
       <div className="w-full max-w-[400px] border border-neutral-300 rounded-lg p-6 md:p-8 space-y-6 bg-white">
