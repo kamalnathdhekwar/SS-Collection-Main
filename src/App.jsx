@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-
+import ClothingMix from "./components/Clothings/ClothingMix";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 
@@ -33,7 +33,7 @@ function App() {
 
           {/* Login */}
           <Route path="/login" element={<LoginPage />} />
-
+          <Route path="/clothings" element={<ClothingMix />} />
           {/* Future Routes */}
           {/* <Route path="/clothing" element={<ClothingMix />} /> */}
           {/* <Route path="/cart" element={<AddToCart />} /> */}
