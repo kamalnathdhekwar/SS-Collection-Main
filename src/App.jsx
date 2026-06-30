@@ -30,10 +30,10 @@ function App() {
         <Routes>
           {/* Home */}
           <Route path="/" element={<HomePage />} />
-
+          <Route path="/clothings" element={<ClothingMix />} />
           {/* Login */}
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/clothings" element={<ClothingMix />} />
+          {/* <Route path="/clothings" element={<ClothingMix />} /> */}
           {/* Future Routes */}
           {/* <Route path="/clothing" element={<ClothingMix />} /> */}
           {/* <Route path="/cart" element={<AddToCart />} /> */}
