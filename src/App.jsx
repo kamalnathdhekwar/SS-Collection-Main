@@ -7,7 +7,7 @@ import Footer from "./components/Footer/Footer";
 import Hero_Section from "./components/Hero_Section/Hero_Section";
 import ProductsMain from "./components/Products/ProductsMain";
 import LoginPage from "./components/LoginPage/LoginPage";
-
+import SportsEquipment from "./components/sportsEquipment/SportsEquipment";
 // Future Pages
 // import ClothingMix from "./clothing/ClothingMix";
 // import AddToCart from "./components/addToCart/addToCart";
@@ -31,6 +31,7 @@ function App() {
           {/* Home */}
           <Route path="/" element={<HomePage />} />
           <Route path="/clothings" element={<ClothingMix />} />
+          <Route path="/sports-equipment" element={<SportsEquipment />} />
           {/* Login */}
           <Route path="/login" element={<LoginPage />} />
           {/* <Route path="/clothings" element={<ClothingMix />} /> */}
