@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"; 
-
+import { useNavigate } from "react-router-dom";
 import {
   FaPhoneAlt,
   FaMapMarkerAlt,
@@ -17,7 +17,7 @@ function Header({ onViewChange }) {
   const [menuOpen, setMenuOpen] = useState(false); // making it responsive
   const [activeDropdown, setActiveDropdown] = useState(null);
   const navRef = useRef(null);
-
+  const navigate = useNavigate();
   const toggleDropdown = (name) => {
     setActiveDropdown((prev) => (prev === name ? null : name));
   };
@@ -122,7 +122,7 @@ function Header({ onViewChange }) {
 
           {/* 2. FIXED LOGO: Wrapped both title and subtitle inside a single div container inside the action button */}
           <button 
-            onClick={() => onViewChange('home')}
+             onClick={() => navigate("/")}
             className="flex flex-col text-left focus:outline-none cursor-pointer group select-none flex-shrink-0"
             aria-label="Navigate to Home"
           >
@@ -165,7 +165,7 @@ function Header({ onViewChange }) {
 
             {/* 3. ACCOUNT: Triggers the same view state when clicked */}
             <button 
-              onClick={() => onViewChange('login')} 
+               onClick={() => navigate("/login")} 
               className="flex items-center gap-0.5 md:gap-2 text-neutral-900 hover:text-blue-600 transition cursor-pointer font-medium px-0.5 md:px-0"
             >
               <FaUser className="text-base md:text-base" />
