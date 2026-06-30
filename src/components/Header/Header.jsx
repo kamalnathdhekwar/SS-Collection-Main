@@ -106,7 +106,8 @@ function Header({ onViewChange }) {
 
       {/* Main Navbar */}
       <div className="bg-white border-b border-neutral-200">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4 w-full">
+        {/* FIXED: Added flex-wrap and responsive padding to prevent squeeze layout on 400px screen */}
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-4 w-full">
 
           <button
             type="button"
@@ -122,22 +123,22 @@ function Header({ onViewChange }) {
 
           {/* 2. FIXED LOGO: Wrapped both title and subtitle inside a single div container inside the action button */}
           <button 
-             onClick={() => navigate("/")}
+             onClick={() => { closeAllMenus(); navigate("/"); }}
             className="flex flex-col text-left focus:outline-none cursor-pointer group select-none flex-shrink-0"
             aria-label="Navigate to Home"
           >
             <div className="flex flex-col text-left">
-              <h1 className="text-lg sm:text-2xl font-black tracking-tight text-neutral-900 uppercase transition-opacity group-hover:opacity-80">
+              <h1 className="text-base sm:text-2xl font-black tracking-tight text-neutral-900 uppercase transition-opacity group-hover:opacity-80">
                 SS <span className="font-light text-neutral-500">Collection</span>
               </h1>
-              <p className="text-[10px] sm:text-xs tracking-widest uppercase font-bold text-neutral-400 -mt-0.5 transition-opacity group-hover:opacity-80 whitespace-nowrap">
+              <p className="text-[9px] sm:text-xs tracking-widest uppercase font-bold text-neutral-400 -mt-0.5 transition-opacity group-hover:opacity-80 whitespace-nowrap">
                 A Multibrand Store
               </p>
             </div>
           </button>
 
-          {/* Search Bar */}
-          <div className="flex-1 min-w-0">
+          {/* Search Bar - FIXED: order classes to stay fluid on mobile layout */}
+          <div className="flex-1 min-w-0 order-3 md:order-none w-full md:w-auto flex-shrink-0 md:flex-shrink">
             <div className="relative w-full">
               <input
                 type="text"
@@ -149,27 +150,27 @@ function Header({ onViewChange }) {
           </div>
 
           {/* User Actions */}
-          <div className="flex items-center justify-end gap-2 md:gap-4 text-xs md:text-sm font-medium flex-shrink-0">
+          <div className="flex items-center justify-end gap-2 md:gap-4 text-xs md:text-sm font-medium ml-auto md:ml-0">
 
             {/* Wishlist */}
-            <button className="flex items-center gap-0.5 md:gap-2 hover:text-blue-600 transition px-0.5 md:px-0">
-              <FaHeart className="text-base md:text-base" />
-              <span className="hidden md:inline">Wishlist</span>
+            <button className="flex items-center gap-1 hover:text-blue-600 transition px-0.5 md:px-0">
+              <FaHeart className="text-base" />
+              <span className="hidden sm:inline">Wishlist</span>
             </button>
 
             {/* Cart */}
-            <button className="flex items-center gap-0.5 md:gap-2 hover:text-blue-600 transition px-0.5 md:px-0">
-              <FaShoppingCart className="text-base md:text-base" />
-              <span className="hidden md:inline">Cart</span>
+            <button className="flex items-center gap-1 hover:text-blue-600 transition px-0.5 md:px-0">
+              <FaShoppingCart className="text-base" />
+              <span className="hidden sm:inline">Cart</span>
             </button>
 
-            {/* 3. ACCOUNT: Triggers the same view state when clicked */}
+            {/* 3. ACCOUNT: Triggers routing view state seamlessly */}
             <button 
                onClick={() => navigate("/login")} 
-              className="flex items-center gap-0.5 md:gap-2 text-neutral-900 hover:text-blue-600 transition cursor-pointer font-medium px-0.5 md:px-0"
+              className="flex items-center gap-1 text-neutral-900 hover:text-blue-600 transition cursor-pointer font-medium px-0.5 md:px-0"
             >
-              <FaUser className="text-base md:text-base" />
-              <span className="hidden md:inline">Account</span>
+              <FaUser className="text-base" />
+              <span className="hidden sm:inline">Account</span>
             </button>
 
           </div>
@@ -188,7 +189,7 @@ function Header({ onViewChange }) {
             ${menuOpen ? "opacity-100 visible" : "opacity-0 invisible md:opacity-100 md:visible"}`}
           >
             {/* Added a toggle back to home view on click if required later */}
-            <li onClick={() => { closeAllMenus(); onViewChange('home'); }}
+            <li onClick={() => { closeAllMenus(); navigate("/"); }}
                 className="relative group cursor-pointer hover:text-blue-600 transition">
               Home
               <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
@@ -224,7 +225,6 @@ function Header({ onViewChange }) {
               <button
                 type="button"
                 onClick={() => navigate("/clothings")}
-
                 className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition focus:outline-none"
               >
                 Clothing
@@ -250,7 +250,6 @@ function Header({ onViewChange }) {
             <li className="relative group" onMouseEnter={() => handleMouseEnter("sports")} onMouseLeave={() => handleMouseLeave("sports")}>
               <button
                 type="button"
-                // onClick={() => toggleDropdown("sports")}
                 onClick={() => navigate("/sports-equipment")}
                 className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition focus:outline-none"
               >
@@ -329,11 +328,11 @@ function Header({ onViewChange }) {
             <li onClick={closeAllMenus}
                  className="relative group cursor-pointer hover:text-blue-600 transition flex items-center gap-1">
               Stores
-              <span className="text-xs transition-transform duration-300 group-hover:rotate-180">▼</span>
               <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </li>
 
-            <li onClick={closeAllMenus}
+            {/* FIXED CONTACT BUTTON: Safe redirect path setup */}
+            <li onClick={() => { closeAllMenus(); navigate("/contact"); }}
                 className="relative group cursor-pointer hover:text-blue-600 transition">
               Contact
               <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
