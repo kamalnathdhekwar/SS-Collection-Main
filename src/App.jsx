@@ -9,6 +9,7 @@ import ProductsMain from "./components/Products/ProductsMain";
 import LoginPage from "./components/LoginPage/LoginPage";
 import ContactPage from "./components/ContactPage/ContactPage";
 import SportsEquipment from "./components/sportsEquipment/SportsEquipment";
+import Footwear from "./components/footwear/FootwearMix";
 
 function HomePage() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/sports-equipment" element={<SportsEquipment />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/footwear" element={<Footwear />} />
         </Routes>
       </main>
 

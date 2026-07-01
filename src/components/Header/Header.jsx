@@ -199,7 +199,8 @@ function Header({ onViewChange }) {
             <li className="relative group" onMouseEnter={() => handleMouseEnter("footwear")} onMouseLeave={() => handleMouseLeave("footwear")}>
               <button
                 type="button"
-                onClick={() => toggleDropdown("footwear")}
+                // onClick={() => toggleDropdown("footwear")}
+                onClick={() => navigate("/footwear")} 
                 className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition focus:outline-none"
               >
                 Footwear
