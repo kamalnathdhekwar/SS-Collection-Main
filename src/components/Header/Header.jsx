@@ -109,6 +109,7 @@ function Header({ onViewChange }) {
         {/* FIXED: Added flex-wrap and responsive padding to prevent squeeze layout on 400px screen */}
         <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-4 w-full">
 
+
           <button
             type="button"
             onClick={(event) => {
