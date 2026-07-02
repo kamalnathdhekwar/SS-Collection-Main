@@ -11,12 +11,14 @@ import ContactPage from "./components/ContactPage/ContactPage";
 import SportsEquipment from "./components/sportsEquipment/SportsEquipment";
 import Footwear from "./components/footwear/FootwearMix";
 import Accessories from "./components/accessories/Accessories";
+import OfferSection from "./components/OfferSection/OfferCardShoes";
 
 function HomePage() {
   return (
     <>
       <Hero_Section />
-      <ProductsMain />
+      <OfferSection />
+      <ProductsMain />   
     </>
   );
 }
@@ -38,7 +40,7 @@ function App() {
           <Route path="/accessories" element={<Accessories />} />
         </Routes>
       </main>
-
+        
       <Footer />
     </div>
   );
