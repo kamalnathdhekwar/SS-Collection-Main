@@ -11,15 +11,17 @@ import ContactPage from "./components/ContactPage/ContactPage";
 import SportsEquipment from "./components/sportsEquipment/SportsEquipment";
 import Footwear from "./components/footwear/FootwearMix";
 import Accessories from "./components/accessories/Accessories";
-import OfferSection from "./components/OfferSection/OfferCardShoes";
+import OfferSectionShoes from "./components/OfferSection/OfferCardShoes";
+import OfferSectionCloths from "./components/OfferSection/OfferCardCloths";
 
 function HomePage() {
   return (
     <>
       <Hero_Section />
-      <OfferSection />
+      <OfferSectionShoes />
+      <OfferSectionCloths /> 
       <ProductsMain />   
-      
+
     </>
   );
 }
