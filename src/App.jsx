@@ -10,6 +10,7 @@ import LoginPage from "./components/LoginPage/LoginPage";
 import ContactPage from "./components/ContactPage/ContactPage";
 import SportsEquipment from "./components/sportsEquipment/SportsEquipment";
 import Footwear from "./components/footwear/FootwearMix";
+import Accessories from "./components/accessories/Accessories";
 
 function HomePage() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/footwear" element={<Footwear />} />
+          <Route path="/accessories" element={<Accessories />} />
         </Routes>
       </main>
 
