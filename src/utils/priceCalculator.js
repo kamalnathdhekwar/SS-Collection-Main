@@ -9,62 +9,38 @@ const PLATFORM_FEE_RATE = 0.02; // 2% platform fee
 const FREE_SHIPPING_THRESHOLD = 500; // Free shipping above ₹500
 const SHIPPING_COST = 40;
 
-/**
- * Calculate the discount amount based on MRP and discount percentage
- */
 export const calculateDiscount = (mrp, discountPercent) => {
   if (!mrp || !discountPercent) return 0;
   return Math.round((mrp * discountPercent) / 100);
 };
 
-/**
- * Calculate the platform fee (2% of subtotal)
- */
 export const calculatePlatformFee = (subtotal) => {
   if (!subtotal) return 0;
   return Math.round(subtotal * PLATFORM_FEE_RATE);
 };
 
-/**
- * Calculate GST (18% of subtotal after discount)
- */
 export const calculateGST = (subtotal) => {
   if (!subtotal) return 0;
   return Math.round(subtotal * GST_RATE);
 };
 
-/**
- * Calculate shipping cost
- * Free shipping above ₹500, otherwise ₹40
- */
 export const calculateShipping = (subtotal) => {
   if (!subtotal) return SHIPPING_COST;
   return subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
 };
 
-/**
- * Parse and validate coupon discount
- */
 export const calculateCouponDiscount = (subtotal, couponValue, isFlatDiscount = true) => {
   if (!couponValue) return 0;
   if (isFlatDiscount) {
-    return Math.min(couponValue, subtotal); // Can't exceed subtotal
+    return Math.min(couponValue, subtotal);
   }
-  // Percentage-based discount
   return Math.round((subtotal * couponValue) / 100);
 };
 
-/**
- * Calculate total savings (difference between MRP and final price)
- */
 export const calculateTotalSavings = (mrpTotal, discountAmount, couponDiscount) => {
   return (discountAmount || 0) + (couponDiscount || 0);
 };
 
-/**
- * Main price summary calculation function
- * Returns complete breakdown of all prices and totals
- */
 export const calculatePriceSummary = (product, quantity, couponDiscount = 0) => {
   if (!product || !quantity) {
     return {
@@ -81,26 +57,19 @@ export const calculatePriceSummary = (product, quantity, couponDiscount = 0) => 
     };
   }
 
-  // Calculate base values
-  const mrpTotal = product.mrp * quantity;
-  const discountAmount = calculateDiscount(product.mrp, product.discount) * quantity;
+  // FIXED: Standardizes mapping using safe fallback parameters to prevent structural key crash
+  const actualMrp = product.mrp || product.originalPrice || product.price;
+  const mrpTotal = actualMrp * quantity;
+  const discountAmount = calculateDiscount(actualMrp, product.discount) * quantity;
   const subtotal = mrpTotal - discountAmount;
 
-  // Calculate fees and taxes
   const platformFee = calculatePlatformFee(subtotal);
   const shipping = calculateShipping(subtotal);
   const gst = calculateGST(subtotal);
 
-  // Apply coupon discount
   const validatedCouponDiscount = Math.min(couponDiscount, subtotal);
-
-  // Calculate grand total
   const grandTotal = subtotal + platformFee + shipping + gst - validatedCouponDiscount;
-
-  // Calculate savings
   const totalSavings = discountAmount + validatedCouponDiscount;
-
-  // Calculate estimated delivery (5-7 business days)
   const estimatedDelivery = getEstimatedDeliveryDate();
 
   return {
@@ -111,25 +80,20 @@ export const calculatePriceSummary = (product, quantity, couponDiscount = 0) => 
     shipping,
     gst,
     couponDiscount: validatedCouponDiscount,
-    grandTotal: Math.max(0, grandTotal), // Ensure non-negative
+    grandTotal: Math.max(0, grandTotal),
     totalSavings,
     estimatedDelivery,
   };
 };
 
-/**
- * Get estimated delivery date (5-7 business days from now)
- */
 export const getEstimatedDeliveryDate = () => {
   const today = new Date();
   const minDays = 5;
   const maxDays = 7;
 
-  // Add minimum days
   const minDelivery = new Date(today);
   minDelivery.setDate(minDelivery.getDate() + minDays);
 
-  // Add maximum days
   const maxDelivery = new Date(today);
   maxDelivery.setDate(maxDelivery.getDate() + maxDays);
 
@@ -149,20 +113,12 @@ export const getEstimatedDeliveryDate = () => {
   };
 };
 
-/**
- * Format price to Indian currency
- */
 export const formatIndianPrice = (price) => {
   if (!price && price !== 0) return "₹0";
   return `₹${Math.round(price).toLocaleString("en-IN")}`;
 };
 
-/**
- * Validate coupon code (mock implementation)
- * In production, this would call an API
- */
 export const validateCoupon = async (couponCode) => {
-  // Mock coupon list
   const validCoupons = {
     SAVE10: { discount: 10, type: "percentage", maxUses: 100 },
     SAVE50: { discount: 50, type: "flat", maxUses: 50 },
@@ -185,6 +141,6 @@ export const validateCoupon = async (couponCode) => {
           message: "Invalid coupon code",
         });
       }
-    }, 500); // Simulate API delay
+    }, 500);
   });
 };

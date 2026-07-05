@@ -19,6 +19,7 @@ function ProductInfo({
   onColorChange,
   onQuantityChange,
   onBuyNow,
+  onAddToCart, // FIXED: Destructured incoming add to cart handler from parent
 }) {
   const firstAvailableSize = product.sizes.find((size) => size.available)?.label || product.sizes[0]?.label;
   const [internalSize, setInternalSize] = useState(firstAvailableSize);
@@ -38,14 +39,36 @@ function ProductInfo({
   const setSelectedColor = onColorChange ?? setInternalColor;
   const setQuantity = onQuantityChange ?? setInternalQuantity;
 
+  // Standardize object fields before running context mutations
+  const getStructuredProduct = () => {
+    return {
+      ...product,
+      mrp: product.mrp || product.originalPrice || product.price,
+      sizes: product.sizes || [{ label: selectedSize || "Free Size", available: true }],
+      colors: product.colors || [{ name: selectedColor || "Standard Color" }],
+      stock: product.stock || { count: 10 }
+    };
+  };
+
   const handleBuyNow = () => {
     if (onBuyNow) {
       onBuyNow();
       return;
     }
-
-    initializeCheckout(product, { selectedSize, selectedColor, quantity });
+    const targetProduct = getStructuredProduct();
+    initializeCheckout(targetProduct, { selectedSize, selectedColor, quantity });
     navigate(`/checkout/${product.id}`, { state: { selectedSize, selectedColor, quantity } });
+  };
+
+  // FIXED: Internal event dispatcher for desktop cart clicks
+  const handleAddToCart = () => {
+    if (onAddToCart) {
+      onAddToCart();
+      return;
+    }
+    const targetProduct = getStructuredProduct();
+    initializeCheckout(targetProduct, { selectedSize, selectedColor, quantity });
+    navigate("/cart");
   };
 
   return (
@@ -67,26 +90,26 @@ function ProductInfo({
       <PriceSection price={product.price} mrp={product.mrp} discount={product.discount} />
 
       <div className="flex flex-wrap gap-2">
-        {product.tags.map((tag) => (
+        {product.tags?.map((tag) => (
           <span key={tag} className="rounded-full bg-rose-50 px-3 py-1 text-xs font-extrabold uppercase text-rose-600">
             {tag}
           </span>
         ))}
         <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-extrabold uppercase text-amber-700">
-          {product.stock.label}
+          {product.stock?.label}
         </span>
       </div>
 
       <SizeSelector sizes={product.sizes} selectedSize={selectedSize} onSelectSize={setSelectedSize} />
       <ColorSelector colors={product.colors} selectedColor={selectedColor} onSelectColor={setSelectedColor} />
-      <QuantitySelector quantity={quantity} onChange={setQuantity} maxQuantity={product.stock.count} />
+      <QuantitySelector quantity={quantity} onChange={setQuantity} maxQuantity={product.stock?.count || 10} />
 
       <ActionButtons
         isWishlisted={isWishlisted}
         onWishlist={() => setIsWishlisted((value) => !value)}
         isCompared={isCompared}
         onCompare={() => setIsCompared((value) => !value)}
-        onAddToCart={() => {}}
+        onAddToCart={handleAddToCart} // FIXED: Dynamic reference hooked instead of blank function block
         onBuyNow={handleBuyNow}
       />
 

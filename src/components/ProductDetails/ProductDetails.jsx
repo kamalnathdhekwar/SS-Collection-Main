@@ -21,9 +21,28 @@ function ProductDetailsContent({ product }) {
 
   const breadcrumbs = useMemo(() => buildBreadcrumbs(product), [product]);
 
+  // Helper to standardise the data schema for the CheckoutContext and calculator
+  const getStructuredProduct = () => {
+    return {
+      ...product,
+      mrp: product.mrp || product.originalPrice || product.price,
+      sizes: product.sizes || [{ label: selectedSize || "Free Size", available: true }],
+      colors: product.colors || [{ name: selectedColor || "Standard Color" }],
+      stock: product.stock || { count: 10 }
+    };
+  };
+
   const handleBuyNow = () => {
-    initializeCheckout(product, { selectedSize, selectedColor, quantity });
+    const targetProduct = getStructuredProduct();
+    initializeCheckout(targetProduct, { selectedSize, selectedColor, quantity });
     navigate(`/checkout/${product.id}`, { state: { selectedSize, selectedColor, quantity } });
+  };
+
+  // FIXED: Functional implementation for adding item to bag and pushing to /cart route
+  const handleAddToCart = () => {
+    const targetProduct = getStructuredProduct();
+    initializeCheckout(targetProduct, { selectedSize, selectedColor, quantity });
+    navigate("/cart"); // Redirects directly to the shopping basket layout path
   };
 
   return (
@@ -42,6 +61,7 @@ function ProductDetailsContent({ product }) {
             onColorChange={setSelectedColor}
             onQuantityChange={setQuantity}
             onBuyNow={handleBuyNow}
+            onAddToCart={handleAddToCart} // FIXED: Injected prop action for the desktop sub-component block
           />
         </div>
 
@@ -54,19 +74,21 @@ function ProductDetailsContent({ product }) {
         </div>
       </div>
 
+      {/* Mobile Sticky Action Bar */}
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white p-3 shadow-2xl lg:hidden">
         <div className="mb-3 flex items-center justify-between">
           <div>
             <p className="text-sm font-extrabold">{formatPrice(product.price)}</p>
             <p className="text-xs text-slate-500">{product.discount}% OFF</p>
           </div>
-          <p className="text-xs font-bold text-amber-600">{product.stock.label}</p>
+          <p className="text-xs font-bold text-amber-600">{product.stock?.label}</p>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <button
             type="button"
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-rose-500 text-sm font-extrabold uppercase text-white"
+            onClick={handleAddToCart} // FIXED: Added click handler on mobile view button
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-rose-500 text-sm font-extrabold uppercase text-white cursor-pointer"
           >
             <ShoppingCart className="h-4 w-4" />
             Add To Bag
@@ -74,7 +96,7 @@ function ProductDetailsContent({ product }) {
           <button
             type="button"
             onClick={handleBuyNow}
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-slate-950 text-sm font-extrabold uppercase text-white"
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-slate-950 text-sm font-extrabold uppercase text-white cursor-pointer"
           >
             <Zap className="h-4 w-4" />
             Buy Now

@@ -37,6 +37,7 @@ const ProductCard = ({ product, onAddToCart }) => {
 
   const formatPrice = (value) => `₹${Number(value || 0).toLocaleString("en-IN")}`;
 
+  // RESTORED: Main card layout template trigger to open product details flawlessly
   const openProduct = useCallback(
     (event) => {
       handleProductNavigation(navigate, { ...product, routeId }, event);
@@ -46,17 +47,24 @@ const ProductCard = ({ product, onAddToCart }) => {
 
   const handleAddToCart = useCallback(
     (event) => {
-      event.stopPropagation();
-      onAddToCart?.(product);
-      handleProductNavigation(navigate, { ...product, routeId }, event);
+      event.stopPropagation(); // SAFE: Prevents opening details page when clicking button
+      
+      // FIXED: Maps originalPrice to mrp key to explicitly satisfy priceCalculator expectation
+      const structuredProduct = {
+        ...product,
+        mrp: product.originalPrice || product.price
+      };
+      
+      onAddToCart?.(structuredProduct);
     },
-    [navigate, onAddToCart, product, routeId],
+    [onAddToCart, product],
   );
 
   return (
     <div className="group h-full w-full">
       <div className="flex h-full cursor-pointer flex-col overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_10px_35px_-20px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_45px_-20px_rgba(15,23,42,0.45)]">
-        <button type="button" onClick={openProduct} className="w-full cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2">
+        {/* Main interactive node for navigation */}
+        <button type="button" onClick={openProduct} className="w-full cursor-pointer text-left focus:outline-none">
           <div className="relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-5">
             <img
               src={image}
@@ -89,11 +97,12 @@ const ProductCard = ({ product, onAddToCart }) => {
           </div>
         </button>
 
+        {/* Separate isolated button node for actions */}
         <div className="px-4 pb-4 sm:px-5">
           <button
             type="button"
             onClick={handleAddToCart}
-            className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-black hover:shadow-lg"
+            className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-black hover:shadow-lg cursor-pointer"
           >
             Add to Cart
           </button>

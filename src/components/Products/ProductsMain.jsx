@@ -1,9 +1,27 @@
+import React from 'react';
 import ProductCard from './ProductCard';
 import productsData from './productsData';
+import { useCheckout } from '../../context/CheckoutContext';
+import { useNavigate } from 'react-router-dom';
 
 const ProductsMain = () => {
+  const { initializeCheckout } = useCheckout();
+  const navigate = useNavigate();
+
   const handleAddToCart = (product) => {
-    console.log('Added to cart:', product?.name);
+    if (!product) return;
+    
+    // Exact schema parsing that CheckoutContext needs
+    const standardProduct = {
+      ...product,
+      mrp: product.originalPrice || product.price,
+      sizes: product.sizes || [{ label: "Free Size", available: true }],
+      colors: product.colors || [{ name: "Standard Color" }],
+      stock: product.stock || { count: 10 }
+    };
+    
+    initializeCheckout(standardProduct, { quantity: 1 });
+    navigate('/cart'); // Direct routing to basket page immediately after clicking
   };
 
   return (

@@ -37,8 +37,9 @@ export default function Footer() {
               Verified Channel
             </span>
 
+            {/* FIXED: Instagram link pointing exactly to sscollectionnagpur handle */}
             <a 
-              href="https://instagram.com" 
+              href="https://www.instagram.com/sscollectionnagpur/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 text-[11px] font-bold tracking-wider text-white bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 px-3 py-1 rounded shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-300 cursor-pointer animate-pulse"

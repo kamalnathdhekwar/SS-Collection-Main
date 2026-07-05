@@ -16,6 +16,7 @@ import OfferSectionCloths from "./components/OfferSection/OfferCardCloths";
 import ProductDetails from "./components/ProductDetails/ProductDetails";
 import ScrollToTop from "./components/common/ScrollToTop";
 import { CheckoutProvider } from "./context/CheckoutContext";
+import AddToCart from "./components/addToCart/addToCart";
 
 const OrderSummary = lazy(() => import("./pages/Checkout/OrderSummary"));
 const Payment = lazy(() => import("./pages/Checkout/Payment"));
@@ -62,6 +63,7 @@ function App() {
               <Route path="/checkout/:productId" element={<OrderSummary />} />
               <Route path="/payment/:productId" element={<Payment />} />
               <Route path="/order-success/:orderId" element={<OrderSuccess />} />
+              <Route path="/cart" element={<AddToCart />} />
             </Routes>
           </Suspense>
         </main>
