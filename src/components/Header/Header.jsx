@@ -163,10 +163,25 @@ function Header({ onViewChange }) {
 
             <button 
                onClick={() => { closeAllMenus(); navigate("/login"); }} 
-              className="flex items-center gap-1 text-neutral-900 hover:text-blue-600 transition cursor-pointer font-medium px-0.5 md:px-0"
+              className="hidden sm:flex items-center gap-1 text-neutral-900 hover:text-blue-600 transition cursor-pointer font-medium px-0.5 md:px-0"
             >
               <FaUser className="text-base" />
-              <span className="hidden sm:inline">Account</span>
+              <span>Sign In</span>
+            </button>
+
+            <button 
+               onClick={() => { closeAllMenus(); navigate("/create-account"); }} 
+              className="hidden sm:flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white transition cursor-pointer font-medium px-3 py-1.5 rounded text-xs md:text-sm"
+            >
+              Sign Up
+            </button>
+
+            {/* Mobile Account Button */}
+            <button 
+               onClick={() => { closeAllMenus(); navigate("/login"); }} 
+              className="sm:hidden flex items-center gap-1 text-neutral-900 hover:text-blue-600 transition cursor-pointer font-medium px-0.5"
+            >
+              <FaUser className="text-base" />
             </button>
 
           </div>

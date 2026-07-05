@@ -6,7 +6,8 @@ import Footer from "./components/Footer/Footer";
 
 import HeroSection from "./components/Hero_Section/Hero_Section";
 import ProductsMain from "./components/Products/ProductsMain";
-import LoginPage from "./components/LoginPage/LoginPage";
+import Login from "./components/LoginPage/Login";
+import CreateAccount from "./components/LoginPage/CreateAccount";
 import ContactPage from "./components/ContactPage/ContactPage";
 import SportsEquipment from "./components/sportsEquipment/SportsEquipment";
 import Footwear from "./components/footwear/FootwearMix";
@@ -55,7 +56,8 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/clothings" element={<ClothingMix />} />
               <Route path="/sports-equipment" element={<SportsEquipment />} />
-              <Route path="/login" element={<LoginPage />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/create-account" element={<CreateAccount />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/footwear" element={<Footwear />} />
               <Route path="/accessories" element={<Accessories />} />
