@@ -63,14 +63,19 @@ export default function Login() {
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       // Store user data in localStorage
-      localStorage.setItem('ss_collection_user', JSON.stringify({
+      const userData = {
+        fullName: formData.email.split('@')[0].charAt(0).toUpperCase() + formData.email.split('@')[0].slice(1), // Extract name from email
         email: formData.email,
         loginTime: new Date().toISOString()
-      }));
+      };
+      localStorage.setItem('ss_collection_user', JSON.stringify(userData));
 
       if (rememberMe) {
         localStorage.setItem('ss_collection_remember_email', formData.email);
       }
+
+      // Notify header/UI that auth state changed (works in the same tab)
+      window.dispatchEvent(new Event('ss-auth-changed'));
 
       setSuccessMessage('✓ Login successful! Redirecting...');
       setTimeout(() => {
