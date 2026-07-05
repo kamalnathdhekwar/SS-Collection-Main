@@ -1,4 +1,4 @@
-import React from "react";
+import { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import ClothingMix from "./components/Clothings/ClothingMix";
 import Header from "./components/Header/Header";
@@ -15,6 +15,19 @@ import OfferSectionShoes from "./components/OfferSection/OfferCardShoes";
 import OfferSectionCloths from "./components/OfferSection/OfferCardCloths";
 import ProductDetails from "./components/ProductDetails/ProductDetails";
 import ScrollToTop from "./components/common/ScrollToTop";
+import { CheckoutProvider } from "./context/CheckoutContext";
+
+const OrderSummary = lazy(() => import("./pages/Checkout/OrderSummary"));
+const Payment = lazy(() => import("./pages/Checkout/Payment"));
+const OrderSuccess = lazy(() => import("./pages/Checkout/OrderSuccess"));
+
+function CheckoutFallback() {
+  return (
+    <div className="grid min-h-[50vh] place-items-center bg-slate-50">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-950 border-r-transparent" />
+    </div>
+  );
+}
 
 function HomePage() {
   return (
@@ -30,26 +43,32 @@ function HomePage() {
 
 function App() {
   return (
-    <div className="w-full min-h-screen bg-white flex flex-col antialiased overflow-x-hidden">
-      <ScrollToTop />
-      <Header />
+    <CheckoutProvider>
+      <div className="w-full min-h-screen bg-white flex flex-col antialiased overflow-x-hidden">
+        <ScrollToTop />
+        <Header />
 
-      {/* CLEANED: Removed global heavy padding to fix Home Page white block */}
-      <main className="flex-1">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/clothings" element={<ClothingMix />} />
-          <Route path="/sports-equipment" element={<SportsEquipment />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/footwear" element={<Footwear />} />
-          <Route path="/accessories" element={<Accessories />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
-        </Routes>
-      </main>
-        
-      <Footer />
-    </div>
+        <main className="flex-1">
+          <Suspense fallback={<CheckoutFallback />}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/clothings" element={<ClothingMix />} />
+              <Route path="/sports-equipment" element={<SportsEquipment />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/footwear" element={<Footwear />} />
+              <Route path="/accessories" element={<Accessories />} />
+              <Route path="/product/:id" element={<ProductDetails />} />
+              <Route path="/checkout/:productId" element={<OrderSummary />} />
+              <Route path="/payment/:productId" element={<Payment />} />
+              <Route path="/order-success/:orderId" element={<OrderSuccess />} />
+            </Routes>
+          </Suspense>
+        </main>
+          
+        <Footer />
+      </div>
+    </CheckoutProvider>
   );
 }
 

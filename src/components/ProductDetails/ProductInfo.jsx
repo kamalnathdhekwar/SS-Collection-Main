@@ -1,5 +1,7 @@
 import { Heart, Star } from "lucide-react";
 import { memo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCheckout } from "../../context/CheckoutContext";
 import ActionButtons from "./ActionButtons";
 import ColorSelector from "./ColorSelector";
 import DeliveryChecker from "./DeliveryChecker";
@@ -8,13 +10,43 @@ import PriceSection from "./PriceSection";
 import QuantitySelector from "./QuantitySelector";
 import SizeSelector from "./SizeSelector";
 
-function ProductInfo({ product }) {
+function ProductInfo({
+  product,
+  selectedSize: controlledSize,
+  selectedColor: controlledColor,
+  quantity: controlledQuantity,
+  onSizeChange,
+  onColorChange,
+  onQuantityChange,
+  onBuyNow,
+}) {
   const firstAvailableSize = product.sizes.find((size) => size.available)?.label || product.sizes[0]?.label;
-  const [selectedSize, setSelectedSize] = useState(firstAvailableSize);
-  const [selectedColor, setSelectedColor] = useState(product.colors[0]?.name);
-  const [quantity, setQuantity] = useState(1);
+  const [internalSize, setInternalSize] = useState(firstAvailableSize);
+  const [internalColor, setInternalColor] = useState(product.colors[0]?.name);
+  const [internalQuantity, setInternalQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isCompared, setIsCompared] = useState(false);
+
+  const navigate = useNavigate();
+  const { initializeCheckout } = useCheckout();
+
+  const selectedSize = controlledSize ?? internalSize;
+  const selectedColor = controlledColor ?? internalColor;
+  const quantity = controlledQuantity ?? internalQuantity;
+
+  const setSelectedSize = onSizeChange ?? setInternalSize;
+  const setSelectedColor = onColorChange ?? setInternalColor;
+  const setQuantity = onQuantityChange ?? setInternalQuantity;
+
+  const handleBuyNow = () => {
+    if (onBuyNow) {
+      onBuyNow();
+      return;
+    }
+
+    initializeCheckout(product, { selectedSize, selectedColor, quantity });
+    navigate(`/checkout/${product.id}`, { state: { selectedSize, selectedColor, quantity } });
+  };
 
   return (
     <aside className="space-y-6">
@@ -55,7 +87,7 @@ function ProductInfo({ product }) {
         isCompared={isCompared}
         onCompare={() => setIsCompared((value) => !value)}
         onAddToCart={() => {}}
-        onBuyNow={() => {}}
+        onBuyNow={handleBuyNow}
       />
 
       <DeliveryChecker delivery={product.delivery} returnPolicy={product.returnPolicy} />
