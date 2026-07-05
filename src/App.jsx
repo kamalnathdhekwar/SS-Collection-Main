@@ -14,6 +14,7 @@ import Accessories from "./components/accessories/Accessories";
 import OfferSectionShoes from "./components/OfferSection/OfferCardShoes";
 import OfferSectionCloths from "./components/OfferSection/OfferCardCloths";
 import ProductDetails from "./components/ProductDetails/ProductDetails";
+import ScrollToTop from "./components/common/ScrollToTop";
 
 function HomePage() {
   return (
@@ -30,6 +31,7 @@ function HomePage() {
 function App() {
   return (
     <div className="w-full min-h-screen bg-white flex flex-col antialiased overflow-x-hidden">
+      <ScrollToTop />
       <Header />
 
       {/* CLEANED: Removed global heavy padding to fix Home Page white block */}
