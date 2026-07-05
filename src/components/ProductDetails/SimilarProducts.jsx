@@ -1,7 +1,7 @@
 import { Star } from "lucide-react";
 import { memo, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { formatPrice, getSimilarProducts } from "../../utils/productHelpers";
+import { formatPrice, getSimilarProducts } from "../../utils/getProductById";
 
 function SimilarProducts({ product }) {
   const similarProducts = useMemo(() => getSimilarProducts(product), [product]);
@@ -16,7 +16,8 @@ function SimilarProducts({ product }) {
         {similarProducts.map((item) => (
           <Link
             key={item.id}
-            to={`/product/${item.id}`}
+            to={`/product/${item.routeId || item.id}`}
+            state={{ productId: item.id }}
             className="w-48 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-white transition hover:-translate-y-1 hover:shadow-lg"
           >
             <img src={item.images[0].src} alt={item.name} className="aspect-[4/5] w-full object-cover" loading="lazy" />

@@ -1,5 +1,5 @@
 import { Package, ShoppingCart, Zap } from "lucide-react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Breadcrumb from "./Breadcrumb";
 import ImageGallery from "./ImageGallery";
@@ -7,14 +7,22 @@ import ProductInfo from "./ProductInfo";
 import ReviewSection from "./ReviewSection";
 import SimilarProducts from "./SimilarProducts";
 import Specifications from "./Specifications";
-import { buildBreadcrumbs, formatPrice, getProductById } from "../../utils/productHelpers";
+import { buildBreadcrumbs, formatPrice, getProductById } from "../../utils/getProductById";
 
 function ProductDetails() {
   const { id } = useParams();
+  const [activeProduct, setActiveProduct] = useState(null);
+
   const product = useMemo(() => getProductById(id), [id]);
   const breadcrumbs = useMemo(() => (product ? buildBreadcrumbs(product) : []), [product]);
 
-  if (!product) {
+  useEffect(() => {
+    setActiveProduct(product || null);
+  }, [product]);
+
+  const displayProduct = activeProduct || product;
+
+  if (!displayProduct) {
     return (
       <main className="grid min-h-screen place-items-center bg-white px-4 text-center">
         <div>
@@ -34,26 +42,26 @@ function ProductDetails() {
         <Breadcrumb items={breadcrumbs} />
 
         <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(430px,0.8fr)]">
-          <ImageGallery images={product.images} productName={product.name} />
-          <ProductInfo key={product.id} product={product} />
+          <ImageGallery images={displayProduct.images} productName={displayProduct.name} />
+          <ProductInfo key={displayProduct.id} product={displayProduct} />
         </div>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(430px,0.8fr)]">
           <div className="space-y-8">
-            <Specifications product={product} />
-            <ReviewSection product={product} />
+            <Specifications product={displayProduct} />
+            <ReviewSection product={displayProduct} />
           </div>
-          <SimilarProducts product={product} />
+          <SimilarProducts product={displayProduct} />
         </div>
       </div>
 
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white p-3 shadow-2xl lg:hidden">
         <div className="mb-3 flex items-center justify-between">
           <div>
-            <p className="text-sm font-extrabold">{formatPrice(product.price)}</p>
-            <p className="text-xs text-slate-500">{product.discount}% OFF</p>
+            <p className="text-sm font-extrabold">{formatPrice(displayProduct.price)}</p>
+            <p className="text-xs text-slate-500">{displayProduct.discount}% OFF</p>
           </div>
-          <p className="text-xs font-bold text-amber-600">{product.stock.label}</p>
+          <p className="text-xs font-bold text-amber-600">{displayProduct.stock.label}</p>
         </div>
 
         <div className="grid grid-cols-2 gap-3">

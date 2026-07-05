@@ -1,6 +1,7 @@
 import { Heart, ShoppingCart, Star, Zap } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { getProductRouteId } from "../../utils/getProductById";
 
 const formatPrice = (price) =>
   new Intl.NumberFormat("en-IN", {
@@ -14,7 +15,7 @@ function ProductCard({ product }) {
 
   return (
     <article className="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-      <Link to={`/product/${product.id}`} className="block focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2">
+      <Link to={`/product/${getProductRouteId(product)}`} className="block focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2">
         <div className="relative aspect-[4/5] w-full overflow-hidden bg-slate-100">
           <img
             src={product.image}
