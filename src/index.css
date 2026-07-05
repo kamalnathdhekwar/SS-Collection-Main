@@ -6,3 +6,10 @@ body {
   background-color: #ffffff;
   color: #171717;
 }
+
+a,
+button,
+[role="button"],
+.clickable {
+  cursor: pointer;
+}
