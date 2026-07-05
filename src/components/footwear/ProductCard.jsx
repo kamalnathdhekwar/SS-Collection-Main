@@ -1,5 +1,6 @@
 import { Heart, ShoppingCart, Star, Truck } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const formatPrice = (price) =>
   new Intl.NumberFormat("en-IN", {
@@ -13,8 +14,9 @@ function ProductCard({ product }) {
 
   return (
     <article className="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-      <div className="relative aspect-[4/5] w-full overflow-hidden bg-slate-100">
-        <img src={product.image} alt={`${product.brand} ${product.name}`} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+      <Link to={`/product/${product.id}`} className="block focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2">
+        <div className="relative aspect-[4/5] w-full overflow-hidden bg-slate-100">
+          <img src={product.image} alt={`${product.brand} ${product.name}`} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
 
         <div className="absolute left-2 top-2 flex max-w-[75%] flex-wrap gap-1.5">
           {product.isTrending && <span className="rounded-full bg-rose-600 px-2 py-1 text-[10px] font-bold uppercase text-white shadow">Trending</span>}
@@ -22,14 +24,16 @@ function ProductCard({ product }) {
           {product.stock === "Limited Stock" && <span className="rounded-full bg-amber-500 px-2 py-1 text-[10px] font-bold uppercase text-white shadow">Limited</span>}
         </div>
 
-        <button type="button" aria-label="Toggle wishlist" onClick={() => setIsWishlisted((value) => !value)} className="absolute right-2 top-2 grid h-9 w-9 place-items-center rounded-full bg-white/95 text-slate-700 shadow-md transition duration-300 hover:scale-110 hover:text-rose-600">
+        <button type="button" aria-label="Toggle wishlist" onClick={(event) => { event.preventDefault(); setIsWishlisted((value) => !value); }} className="absolute right-2 top-2 grid h-9 w-9 place-items-center rounded-full bg-white/95 text-slate-700 shadow-md transition duration-300 hover:scale-110 hover:text-rose-600">
           <Heart className={`h-4 w-4 ${isWishlisted ? "fill-rose-600 text-rose-600" : ""}`} />
         </button>
 
-        <button type="button" className="absolute inset-x-2 bottom-2 translate-y-3 rounded-lg bg-white/95 px-3 py-2 text-xs font-bold text-slate-900 opacity-0 shadow-lg transition duration-300 hover:bg-slate-900 hover:text-white group-hover:translate-y-0 group-hover:opacity-100">
+        <button type="button" onClick={(event) => event.preventDefault()} className="absolute inset-x-2 bottom-2 translate-y-3 rounded-lg bg-white/95 px-3 py-2 text-xs font-bold text-slate-900 opacity-0 shadow-lg transition duration-300 hover:bg-slate-900 hover:text-white group-hover:translate-y-0 group-hover:opacity-100">
           Quick View
         </button>
       </div>
+
+      </Link>
 
       <div className="flex flex-1 flex-col gap-3 p-3 sm:p-4">
         <div className="flex items-start justify-between gap-2">

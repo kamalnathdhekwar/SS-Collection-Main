@@ -4,7 +4,7 @@ import ClothingMix from "./components/Clothings/ClothingMix";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 
-import Hero_Section from "./components/Hero_Section/Hero_Section";
+import HeroSection from "./components/Hero_Section/Hero_Section";
 import ProductsMain from "./components/Products/ProductsMain";
 import LoginPage from "./components/LoginPage/LoginPage";
 import ContactPage from "./components/ContactPage/ContactPage";
@@ -13,11 +13,12 @@ import Footwear from "./components/footwear/FootwearMix";
 import Accessories from "./components/accessories/Accessories";
 import OfferSectionShoes from "./components/OfferSection/OfferCardShoes";
 import OfferSectionCloths from "./components/OfferSection/OfferCardCloths";
+import ProductDetails from "./components/ProductDetails/ProductDetails";
 
 function HomePage() {
   return (
     <>
-      <Hero_Section />
+      <HeroSection />
       <OfferSectionShoes />
       <OfferSectionCloths /> 
       <ProductsMain />   
@@ -41,6 +42,7 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/footwear" element={<Footwear />} />
           <Route path="/accessories" element={<Accessories />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
         </Routes>
       </main>
         

@@ -97,7 +97,7 @@ function Header({ onViewChange }) {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-lg">
+    <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-lg mb-11 ">
 
       {/* Promo Banner */}
       <div className="bg-blue-600 text-white text-center py-2 text-sm font-medium">
