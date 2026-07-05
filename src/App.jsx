@@ -1,5 +1,6 @@
 import { Suspense, lazy } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { adminRoutes } from "./admin/routes/adminRoutes";
 import ClothingMix from "./components/Clothings/ClothingMix";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -38,7 +39,58 @@ function HomePage() {
       <OfferSectionShoes />
       <OfferSectionCloths /> 
       <ProductsMain />   
+    </>
+  );
+}
 
+function AppContent() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith("/admin");
+
+  if (isAdmin) {
+    return (
+      <Suspense fallback={<CheckoutFallback />}>
+        <Routes>
+          {adminRoutes.map((route) => (
+            <Route key={route.path} path={route.path} element={route.element}>
+              {route.children?.map((child) => (
+                <Route
+                  key={child.path || "index"}
+                  index={child.index || false}
+                  path={child.path}
+                  element={child.element}
+                />
+              ))}
+            </Route>
+          ))}
+        </Routes>
+      </Suspense>
+    );
+  }
+
+  return (
+    <>
+      <Header />
+      <main className="flex-1 pt-24 md:pt-36">
+        <Suspense fallback={<CheckoutFallback />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/clothings" element={<ClothingMix />} />
+            <Route path="/sports-equipment" element={<SportsEquipment />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/create-account" element={<CreateAccount />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/footwear" element={<Footwear />} />
+            <Route path="/accessories" element={<Accessories />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/checkout/:productId" element={<OrderSummary />} />
+            <Route path="/payment/:productId" element={<Payment />} />
+            <Route path="/order-success/:orderId" element={<OrderSuccess />} />
+            <Route path="/cart" element={<AddToCart />} />
+          </Routes>
+        </Suspense>
+      </main>
+      <Footer />
     </>
   );
 }
@@ -48,29 +100,7 @@ function App() {
     <CheckoutProvider>
       <div className="w-full min-h-screen bg-white flex flex-col antialiased overflow-x-hidden">
         <ScrollToTop />
-        <Header />
-
-        <main className="flex-1 pt-24 md:pt-36">
-          <Suspense fallback={<CheckoutFallback />}>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/clothings" element={<ClothingMix />} />
-              <Route path="/sports-equipment" element={<SportsEquipment />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/create-account" element={<CreateAccount />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/footwear" element={<Footwear />} />
-              <Route path="/accessories" element={<Accessories />} />
-              <Route path="/product/:id" element={<ProductDetails />} />
-              <Route path="/checkout/:productId" element={<OrderSummary />} />
-              <Route path="/payment/:productId" element={<Payment />} />
-              <Route path="/order-success/:orderId" element={<OrderSuccess />} />
-              <Route path="/cart" element={<AddToCart />} />
-            </Routes>
-          </Suspense>
-        </main>
-          
-        <Footer />
+        <AppContent />
       </div>
     </CheckoutProvider>
   );

@@ -1,0 +1,17 @@
+export const customersData = [
+  { id: 1, name: "Rahul Sharma", email: "rahul.sharma@email.com", phone: "+91 98765 43210", totalOrders: 12, totalSpent: 45980, joined: "2025-01-15", status: "Active", city: "Bangalore" },
+  { id: 2, name: "Priya Patel", email: "priya.patel@email.com", phone: "+91 98765 43211", totalOrders: 8, totalSpent: 32450, joined: "2025-02-20", status: "Active", city: "Mumbai" },
+  { id: 3, name: "Amit Verma", email: "amit.verma@email.com", phone: "+91 98765 43212", totalOrders: 5, totalSpent: 12480, joined: "2025-03-10", status: "Active", city: "Kolkata" },
+  { id: 4, name: "Sneha Gupta", email: "sneha.gupta@email.com", phone: "+91 98765 43213", totalOrders: 3, totalSpent: 4590, joined: "2025-04-05", status: "Active", city: "Delhi" },
+  { id: 5, name: "Vikram Singh", email: "vikram.singh@email.com", phone: "+91 98765 43214", totalOrders: 15, totalSpent: 67890, joined: "2024-11-01", status: "Active", city: "Jaipur" },
+  { id: 6, name: "Neha Kapoor", email: "neha.kapoor@email.com", phone: "+91 98765 43215", totalOrders: 2, totalSpent: 6998, joined: "2025-05-12", status: "Inactive", city: "Pune" },
+  { id: 7, name: "Rohit Nair", email: "rohit.nair@email.com", phone: "+91 98765 43216", totalOrders: 9, totalSpent: 28500, joined: "2025-01-28", status: "Active", city: "Chennai" },
+  { id: 8, name: "Ananya Reddy", email: "ananya.reddy@email.com", phone: "+91 98765 43217", totalOrders: 6, totalSpent: 18900, joined: "2025-03-22", status: "Active", city: "Hyderabad" },
+  { id: 9, name: "Karan Mehta", email: "karan.mehta@email.com", phone: "+91 98765 43218", totalOrders: 4, totalSpent: 10996, joined: "2025-06-01", status: "Active", city: "Ludhiana" },
+  { id: 10, name: "Meera Joshi", email: "meera.joshi@email.com", phone: "+91 98765 43219", totalOrders: 1, totalSpent: 2499, joined: "2026-07-05", status: "New", city: "Ahmedabad" },
+  { id: 11, name: "Arjun Nair", email: "arjun.nair@email.com", phone: "+91 98765 43220", totalOrders: 7, totalSpent: 21500, joined: "2025-02-14", status: "Active", city: "Bangalore" },
+  { id: 12, name: "Pooja Desai", email: "pooja.desai@email.com", phone: "+91 98765 43221", totalOrders: 3, totalSpent: 3897, joined: "2025-04-30", status: "Inactive", city: "Hyderabad" },
+  { id: 13, name: "Rajesh Kumar", email: "rajesh.kumar@email.com", phone: "+91 98765 43222", totalOrders: 11, totalSpent: 44500, joined: "2024-12-10", status: "Active", city: "Patna" },
+  { id: 14, name: "Divya Sharma", email: "divya.sharma@email.com", phone: "+91 98765 43223", totalOrders: 5, totalSpent: 8995, joined: "2025-05-18", status: "Active", city: "Delhi" },
+  { id: 15, name: "Suresh Iyer", email: "suresh.iyer@email.com", phone: "+91 98765 43224", totalOrders: 8, totalSpent: 23400, joined: "2025-01-05", status: "Active", city: "Chennai" },
+];

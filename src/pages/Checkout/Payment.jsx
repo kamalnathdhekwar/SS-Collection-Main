@@ -204,11 +204,12 @@ function Payment() {
           {/* Left — Payment Methods + Form */}
           <div className="md:col-span-2 space-y-4">
             <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-              <div className="hidden md:grid md:grid-cols-[240px_1fr]">
-                <div className="border-r border-slate-200 bg-white">
+              {/* Desktop layout — flex row: fixed-width sidebar + form panel */}
+              <div className="hidden md:flex">
+                <div className="w-60 flex-shrink-0 border-r border-slate-200 bg-white">
                   <PaymentMethods layout="sidebar" />
                 </div>
-                <div className="p-6">
+                <div className="flex-1 min-w-0 p-6">
                   <PaymentFormPanel paymentMethod={paymentMethod} priceSummary={priceSummary} />
                 </div>
               </div>
