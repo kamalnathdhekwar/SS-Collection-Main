@@ -14,7 +14,7 @@ const PriceSummary = memo(({ compact = false }) => {
   if (!priceSummary) return null;
 
   return (
-    <div className={`bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm ${compact ? "" : "sticky top-4"}`}>
+    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
       <div className="p-4 sm:p-6">
         <h3 className="text-lg font-bold text-slate-950 mb-4">Price Details</h3>
 

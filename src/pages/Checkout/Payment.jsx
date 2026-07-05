@@ -178,11 +178,11 @@ function Payment() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-28 lg:pb-8">
+    <div className="min-h-screen bg-slate-50 pb-28 md:pb-8">
       <CheckoutStepper currentStep={2} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-8">
-        <div className="flex items-center justify-between mb-4 lg:mb-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8">
+        <div className="flex items-center justify-between mb-4 md:mb-6">
           <button
             type="button"
             onClick={() => navigate(`/checkout/${productId}`)}
@@ -200,11 +200,11 @@ function Payment() {
 
         <h1 className="text-xl sm:text-2xl font-bold text-slate-950 mb-6">Complete Payment</h1>
 
-        <div className="grid gap-6 lg:grid-cols-3 lg:gap-8">
+        <div className="grid gap-6 md:grid-cols-3 md:gap-8">
           {/* Left — Payment Methods + Form */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="md:col-span-2 space-y-4">
             <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-              <div className="hidden lg:grid lg:grid-cols-[240px_1fr]">
+              <div className="hidden md:grid md:grid-cols-[240px_1fr]">
                 <div className="border-r border-slate-200 bg-white">
                   <PaymentMethods layout="sidebar" />
                 </div>
@@ -214,7 +214,7 @@ function Payment() {
               </div>
 
               {/* Mobile layout */}
-              <div className="lg:hidden p-4 space-y-4">
+              <div className="md:hidden p-4 space-y-4">
                 <PaymentMethods layout="list" />
                 <div className="pt-4 border-t border-slate-200">
                   <PaymentFormPanel paymentMethod={paymentMethod} priceSummary={priceSummary} />
@@ -260,21 +260,21 @@ function Payment() {
           </div>
 
           {/* Right — Sticky Summary */}
-          <div className="lg:col-span-1">
-            <div className="lg:sticky lg:top-4 space-y-4">
+          <div className="md:col-span-1">
+            <div className="md:sticky md:top-36 space-y-4">
               <PriceSummary compact />
 
               <button
                 type="button"
                 onClick={handlePayment}
                 disabled={orderLoading}
-                className="hidden lg:flex w-full px-6 py-4 bg-emerald-600 text-white rounded-lg font-bold text-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed items-center justify-center gap-2"
+                className="hidden md:flex w-full px-6 py-4 bg-emerald-600 text-white rounded-lg font-bold text-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed items-center justify-center gap-2"
               >
                 <Lock className="w-5 h-5" aria-hidden="true" />
                 Pay {formatIndianPrice(priceSummary.grandTotal)}
               </button>
 
-              <div className="hidden lg:block p-4 bg-white rounded-lg border border-slate-200">
+              <div className="hidden md:block p-4 bg-white rounded-lg border border-slate-200">
                 <p className="text-xs text-slate-500 font-semibold mb-2">TRUSTED & SECURE</p>
                 <ul className="space-y-1.5 text-xs text-slate-600">
                   <li>✓ 256-bit SSL Encryption</li>
@@ -288,7 +288,7 @@ function Payment() {
       </main>
 
       {/* Sticky Mobile Pay Bar */}
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white p-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] lg:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white p-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:hidden">
         <div className="flex items-center gap-3 max-w-7xl mx-auto">
           <div className="min-w-0">
             <p className="text-xs text-slate-500">Pay Amount</p>
