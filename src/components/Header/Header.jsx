@@ -41,7 +41,11 @@ function Header({ onViewChange }) {
     
     // Listen for storage changes to sync login status
     window.addEventListener('storage', checkLoginStatus);
-    return () => window.removeEventListener('storage', checkLoginStatus);
+    window.addEventListener('ss-auth-changed', checkLoginStatus);
+    return () => {
+      window.removeEventListener('storage', checkLoginStatus);
+      window.removeEventListener('ss-auth-changed', checkLoginStatus);
+    };
   }, []);
   
   // FIXED: Syncs Cart Item units dynamically for navigation visibility
@@ -210,39 +214,87 @@ function Header({ onViewChange }) {
             </button>
 
             {isLoggedIn && userData ? (
-              // Profile Dropdown for Logged-in Users
+              // Profile Dropdown for Logged-in Users - ENHANCED WITH ANIMATIONS
               <div className="relative" ref={profileMenuRef}>
                 <button
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                  className="hidden sm:flex items-center gap-2 text-neutral-900 hover:text-blue-600 transition cursor-pointer font-medium px-3 py-2 rounded-lg hover:bg-neutral-100"
+                  className="hidden sm:flex items-center gap-2 font-medium px-3 py-2 rounded-lg transition-all duration-300 group"
+                  style={{
+                    background: profileDropdownOpen ? '#e3f2fd' : 'transparent',
+                    color: profileDropdownOpen ? '#2563eb' : '#111827',
+                    boxShadow: profileDropdownOpen ? '0 0 12px rgba(37, 99, 235, 0.2)' : 'none'
+                  }}
                   aria-label="Profile menu"
                 >
-                  <FaUser className="text-base" />
-                  <span className="text-sm truncate max-w-[120px]">{userData.fullName || userData.email || "Profile"}</span>
-                  <FaChevronDown className={`text-xs transition-transform ${profileDropdownOpen ? "rotate-180" : ""}`} />
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110">
+                    <FaUser className="text-white text-sm" />
+                  </div>
+                  <span className="text-sm truncate max-w-[100px] font-semibold">{userData.fullName || userData.email || "Profile"}</span>
+                  <FaChevronDown className={`text-xs transition-all duration-300 ${profileDropdownOpen ? "rotate-180 text-blue-600" : "text-neutral-400"}`} />
                 </button>
 
-                {/* Dropdown Menu */}
+                {/* Animated Dropdown Menu */}
                 {profileDropdownOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-neutral-200 z-50">
-                    <div className="p-3 border-b border-neutral-200">
-                      <p className="text-sm font-semibold text-neutral-900">{userData.fullName || "My Account"}</p>
-                      <p className="text-xs text-neutral-600">{userData.email}</p>
+                  <div 
+                    className="absolute right-0 top-full mt-3 w-56 bg-white rounded-xl shadow-2xl border border-blue-100 z-50 overflow-hidden"
+                    style={{
+                      animation: 'slideDown 0.3s ease-out forwards'
+                    }}
+                  >
+                    <style>{`
+                      @keyframes slideDown {
+                        from {
+                          opacity: 0;
+                          transform: translateY(-12px);
+                        }
+                        to {
+                          opacity: 1;
+                          transform: translateY(0);
+                        }
+                      }
+                    `}</style>
+                    
+                    {/* Profile Header */}
+                    <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 border-b border-blue-200">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-md">
+                          <FaUser className="text-white text-sm" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-bold text-neutral-900">{userData.fullName || "My Account"}</p>
+                          <p className="text-xs text-neutral-600 truncate">{userData.email}</p>
+                        </div>
+                      </div>
                     </div>
-                    <button
-                      onClick={() => { closeAllMenus(); navigate("/profile"); }}
-                      className="w-full text-left px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 hover:text-blue-600 transition flex items-center gap-2"
-                    >
-                      <FaUser className="text-base" />
-                      My Profile
-                    </button>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition flex items-center gap-2 border-t border-neutral-200"
-                    >
-                      <FaSignOutAlt className="text-base" />
-                      Logout
-                    </button>
+
+                    {/* Menu Items */}
+                    <div className="py-2">
+                      <button
+                        onClick={() => { closeAllMenus(); navigate("/profile"); }}
+                        className="w-full text-left px-4 py-3 text-sm text-neutral-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 flex items-center gap-3 group"
+                      >
+                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors duration-200">
+                          <FaUser className="text-blue-600 text-sm" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium">My Profile</p>
+                          <p className="text-xs text-neutral-500">View and edit info</p>
+                        </div>
+                      </button>
+
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-3 text-sm text-neutral-700 hover:bg-red-50 hover:text-red-600 transition-all duration-200 flex items-center gap-3 group border-t border-neutral-100"
+                      >
+                        <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors duration-200">
+                          <FaSignOutAlt className="text-red-600 text-sm" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium">Logout</p>
+                          <p className="text-xs text-neutral-500">Sign out securely</p>
+                        </div>
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
@@ -266,13 +318,76 @@ function Header({ onViewChange }) {
               </>
             )}
 
-            {/* Mobile Account Button */}
-            <button 
-               onClick={() => { closeAllMenus(); isLoggedIn ? setProfileDropdownOpen(!profileDropdownOpen) : navigate("/login"); }} 
-              className="sm:hidden flex items-center gap-1 text-neutral-900 hover:text-blue-600 transition cursor-pointer font-medium px-0.5"
-            >
-              <FaUser className="text-base" />
-            </button>
+            {/* Mobile Account Button - ANIMATED PROFILE ICON */}
+            {isLoggedIn && userData ? (
+              <div className="sm:hidden relative">
+                <button 
+                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                  className="flex items-center justify-center w-9 h-9 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full text-white hover:shadow-lg transition-all duration-300 hover:scale-110 group"
+                >
+                  <FaUser className="text-sm group-hover:scale-125 transition-transform duration-300" />
+                </button>
+
+                {/* Mobile Dropdown Menu */}
+                {profileDropdownOpen && (
+                  <div 
+                    className="absolute right-0 top-full mt-3 w-56 bg-white rounded-xl shadow-2xl border border-blue-100 z-50 overflow-hidden"
+                    style={{
+                      animation: 'slideDown 0.3s ease-out forwards'
+                    }}
+                  >
+                    {/* Profile Header */}
+                    <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 border-b border-blue-200">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-md">
+                          <FaUser className="text-white text-lg" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-bold text-neutral-900">{userData.fullName || "My Account"}</p>
+                          <p className="text-xs text-neutral-600 truncate">{userData.email}</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Menu Items */}
+                    <div className="py-2">
+                      <button 
+                        onClick={() => { closeAllMenus(); navigate("/profile"); }}
+                        className="w-full text-left px-4 py-3 text-sm text-neutral-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 flex items-center gap-3 group"
+                      >
+                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors duration-200">
+                          <FaUser className="text-blue-600 text-sm" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium">My Profile</p>
+                          <p className="text-xs text-neutral-500">View and edit</p>
+                        </div>
+                      </button>
+                      
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-3 text-sm text-neutral-700 hover:bg-red-50 hover:text-red-600 transition-all duration-200 flex items-center gap-3 group border-t border-neutral-100"
+                      >
+                        <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors duration-200">
+                          <FaSignOutAlt className="text-red-600 text-sm" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium">Logout</p>
+                          <p className="text-xs text-neutral-500">Sign out</p>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button 
+                onClick={() => { closeAllMenus(); navigate("/login"); }}
+                className="sm:hidden flex items-center justify-center w-9 h-9 text-neutral-900 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-300 hover:scale-110 group"
+              >
+                <FaUser className="text-base group-hover:scale-125 transition-transform duration-300" />
+              </button>
+            )}
 
           </div>
 

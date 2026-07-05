@@ -139,6 +139,9 @@ export default function CreateAccount() {
         localStorage.setItem('ss_collection_newsletter', 'true');
       }
 
+      // Notify header/UI that auth state changed (works in the same tab)
+      window.dispatchEvent(new Event('ss-auth-changed'));
+
       setSuccessMessage('✓ Account created successfully! Redirecting...');
       setTimeout(() => {
         navigate('/');
