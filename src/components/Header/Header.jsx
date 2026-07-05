@@ -10,15 +10,40 @@ import {
   FaSearch,
   FaBars,
   FaTimes,
+  FaSignOutAlt,
+  FaChevronDown,
 } from "react-icons/fa";
+import { isUserLoggedIn, getAuthData, clearAuthData } from "../../utils/authValidation";
 
 function Header({ onViewChange }) {
   const [menuOpen, setMenuOpen] = useState(false); 
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [cartBadgeCount, setCartBadgeCount] = useState(0); // FIXED: Added Cart Badge tracking state
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const profileMenuRef = useRef(null);
   const navRef = useRef(null);
   const navigate = useNavigate();
 
+  // FIXED: Check if user is logged in
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const loggedIn = isUserLoggedIn();
+      setIsLoggedIn(loggedIn);
+      if (loggedIn) {
+        const data = getAuthData();
+        setUserData(data);
+      }
+    };
+
+    checkLoginStatus();
+    
+    // Listen for storage changes to sync login status
+    window.addEventListener('storage', checkLoginStatus);
+    return () => window.removeEventListener('storage', checkLoginStatus);
+  }, []);
+  
   // FIXED: Syncs Cart Item units dynamically for navigation visibility
   useEffect(() => {
     const syncCartCount = () => {
@@ -68,7 +93,27 @@ function Header({ onViewChange }) {
   const closeAllMenus = () => {
     setMenuOpen(false);
     closeDropdown();
+    setProfileDropdownOpen(false);
   };
+
+  const handleLogout = () => {
+    clearAuthData();
+    setIsLoggedIn(false);
+    setUserData(null);
+    setProfileDropdownOpen(false);
+    navigate("/");
+  };
+
+  // Close profile dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+        setProfileDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const footwearItems = ["Running Shoes", "Casual Shoes", "Sneakers", "Sports Shoes", "Sandals & Slippers"];
   const clothingItems = ["T-Shirts", "Shirts", "Jeans", "Shorts", "Track Pants", "Jackets", "Sportswear", "Men's Fashion", "Women's Fashion"];
@@ -76,10 +121,13 @@ function Header({ onViewChange }) {
   const accessoriesItems = ["Sunglasses", "Caps", "Socks", "Wallets", "Belts", "Bags"];
   const brandsItems = ["Nike", "Puma", "Reebok", "Raymond", "Levi's", "Other Premium Brands"];
 
+  // Close navigation menu when clicking outside nav area (but not on profile menu)
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (navRef.current && !navRef.current.contains(event.target)) {
-        closeAllMenus();
+        if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+          closeAllMenus();
+        }
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -161,24 +209,66 @@ function Header({ onViewChange }) {
               <span className="hidden sm:inline">Cart</span>
             </button>
 
-            <button 
-               onClick={() => { closeAllMenus(); navigate("/login"); }} 
-              className="hidden sm:flex items-center gap-1 text-neutral-900 hover:text-blue-600 transition cursor-pointer font-medium px-0.5 md:px-0"
-            >
-              <FaUser className="text-base" />
-              <span>Sign In</span>
-            </button>
+            {isLoggedIn && userData ? (
+              // Profile Dropdown for Logged-in Users
+              <div className="relative" ref={profileMenuRef}>
+                <button
+                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                  className="hidden sm:flex items-center gap-2 text-neutral-900 hover:text-blue-600 transition cursor-pointer font-medium px-3 py-2 rounded-lg hover:bg-neutral-100"
+                  aria-label="Profile menu"
+                >
+                  <FaUser className="text-base" />
+                  <span className="text-sm truncate max-w-[120px]">{userData.fullName || userData.email || "Profile"}</span>
+                  <FaChevronDown className={`text-xs transition-transform ${profileDropdownOpen ? "rotate-180" : ""}`} />
+                </button>
 
-            <button 
-               onClick={() => { closeAllMenus(); navigate("/create-account"); }} 
-              className="hidden sm:flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white transition cursor-pointer font-medium px-3 py-1.5 rounded text-xs md:text-sm"
-            >
-              Sign Up
-            </button>
+                {/* Dropdown Menu */}
+                {profileDropdownOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-neutral-200 z-50">
+                    <div className="p-3 border-b border-neutral-200">
+                      <p className="text-sm font-semibold text-neutral-900">{userData.fullName || "My Account"}</p>
+                      <p className="text-xs text-neutral-600">{userData.email}</p>
+                    </div>
+                    <button
+                      onClick={() => { closeAllMenus(); navigate("/profile"); }}
+                      className="w-full text-left px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 hover:text-blue-600 transition flex items-center gap-2"
+                    >
+                      <FaUser className="text-base" />
+                      My Profile
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition flex items-center gap-2 border-t border-neutral-200"
+                    >
+                      <FaSignOutAlt className="text-base" />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              // Sign In/Sign Up Buttons for Not Logged-in Users
+              <>
+                <button 
+                   onClick={() => { closeAllMenus(); navigate("/login"); }} 
+                  className="hidden sm:flex items-center gap-1 text-neutral-900 hover:text-blue-600 transition cursor-pointer font-medium px-0.5 md:px-0"
+                >
+                  <FaUser className="text-base" />
+                  <span>Sign In</span>
+                </button>
+
+                <button 
+                   onClick={() => { closeAllMenus(); navigate("/create-account"); }} 
+                  className="hidden sm:flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white transition cursor-pointer font-medium px-3 py-1.5 rounded text-xs md:text-sm"
+                >
+                  Sign Up
+                </button>
+              </>
+            )}
 
             {/* Mobile Account Button */}
             <button 
-               onClick={() => { closeAllMenus(); navigate("/login"); }} 
+               onClick={() => { closeAllMenus(); isLoggedIn ? setProfileDropdownOpen(!profileDropdownOpen) : navigate("/login"); }} 
               className="sm:hidden flex items-center gap-1 text-neutral-900 hover:text-blue-600 transition cursor-pointer font-medium px-0.5"
             >
               <FaUser className="text-base" />
