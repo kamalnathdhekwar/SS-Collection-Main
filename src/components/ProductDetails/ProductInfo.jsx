@@ -1,5 +1,5 @@
 import { Heart, Star } from "lucide-react";
-import { memo, useState } from "react";
+import { memo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCheckout } from "../../context/CheckoutContext";
 import ActionButtons from "./ActionButtons";
@@ -19,7 +19,7 @@ function ProductInfo({
   onColorChange,
   onQuantityChange,
   onBuyNow,
-  onAddToCart, // FIXED: Destructured incoming add to cart handler from parent
+  onAddToCart,
 }) {
   const firstAvailableSize = product.sizes.find((size) => size.available)?.label || product.sizes[0]?.label;
   const [internalSize, setInternalSize] = useState(firstAvailableSize);
@@ -39,7 +39,17 @@ function ProductInfo({
   const setSelectedColor = onColorChange ?? setInternalColor;
   const setQuantity = onQuantityChange ?? setInternalQuantity;
 
-  // Standardize object fields before running context mutations
+  // FIXED INITIAL LOAD CHECK: Query persistent storage lists to freeze button hearts if already favorited
+  useEffect(() => {
+    try {
+      const savedWishlist = localStorage.getItem('ss_collection_wishlist');
+      if (savedWishlist) {
+        const list = JSON.parse(savedWishlist);
+        setIsWishlisted(list.some(item => item.id === product.id));
+      }
+    } catch (e) {}
+  }, [product.id]);
+
   const getStructuredProduct = () => {
     return {
       ...product,
@@ -48,6 +58,28 @@ function ProductInfo({
       colors: product.colors || [{ name: selectedColor || "Standard Color" }],
       stock: product.stock || { count: 10 }
     };
+  };
+
+  // FIXED WISHLIST TOGGLE DISPATCHER: Saves or wipes matching assets from device database
+  const handleWishlistToggle = () => {
+    try {
+      const savedWishlist = localStorage.getItem('ss_collection_wishlist');
+      let currentList = savedWishlist ? JSON.parse(savedWishlist) : [];
+      
+      const exists = currentList.find(item => item.id === product.id);
+      if (exists) {
+        currentList = currentList.filter(item => item.id !== product.id);
+        setIsWishlisted(false);
+      } else {
+        currentList.push(getStructuredProduct());
+        setIsWishlisted(true);
+      }
+      
+      localStorage.setItem('ss_collection_wishlist', JSON.stringify(currentList));
+      window.dispatchEvent(new Event('storage')); // Alert Navbar badge count instantly
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const handleBuyNow = () => {
@@ -60,7 +92,6 @@ function ProductInfo({
     navigate(`/checkout/${product.id}`, { state: { selectedSize, selectedColor, quantity } });
   };
 
-  // FIXED: Internal event dispatcher for desktop cart clicks
   const handleAddToCart = () => {
     if (onAddToCart) {
       onAddToCart();
@@ -106,10 +137,10 @@ function ProductInfo({
 
       <ActionButtons
         isWishlisted={isWishlisted}
-        onWishlist={() => setIsWishlisted((value) => !value)}
+        onWishlist={handleWishlistToggle} // FIXED LINK ATTACHED
         isCompared={isCompared}
         onCompare={() => setIsCompared((value) => !value)}
-        onAddToCart={handleAddToCart} // FIXED: Dynamic reference hooked instead of blank function block
+        onAddToCart={handleAddToCart}
         onBuyNow={handleBuyNow}
       />
 
@@ -117,7 +148,7 @@ function ProductInfo({
       <OffersSection offers={product.offers} />
 
       {isWishlisted && (
-        <p className="inline-flex items-center gap-2 text-sm font-bold text-rose-600">
+        <p className="inline-flex items-center gap-2 text-sm font-bold text-rose-600 animate-fade-in">
           <Heart className="h-4 w-4 fill-rose-600" />
           Added to wishlist
         </p>

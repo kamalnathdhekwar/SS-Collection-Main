@@ -20,6 +20,7 @@ import ProductDetails from "./components/ProductDetails/ProductDetails";
 import ScrollToTop from "./components/common/ScrollToTop";
 import { CheckoutProvider } from "./context/CheckoutContext";
 import AddToCart from "./components/addToCart/addToCart";
+import Wishlist from "./components/Wishlist/Wishlist"; // Importing verified capital layout
 
 const OrderSummary = lazy(() => import("./pages/Checkout/OrderSummary"));
 const Payment = lazy(() => import("./pages/Checkout/Payment"));
@@ -88,6 +89,9 @@ function AppContent() {
             <Route path="/payment/:productId" element={<Payment />} />
             <Route path="/order-success/:orderId" element={<OrderSuccess />} />
             <Route path="/cart" element={<AddToCart />} />
+            
+            {/* FIXED CORE MOUNT: Hooked matching endpoint element target */}
+            <Route path="/wishlist" element={<Wishlist />} />
           </Routes>
         </Suspense>
       </main>
