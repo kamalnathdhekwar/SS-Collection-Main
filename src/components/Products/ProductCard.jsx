@@ -64,7 +64,7 @@ const ProductCard = ({ product, onAddToCart }) => {
     <div className="group h-full w-full">
       <div className="flex h-full cursor-pointer flex-col overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_10px_35px_-20px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_45px_-20px_rgba(15,23,42,0.45)]">
         {/* Main interactive node for navigation */}
-        <button type="button" onClick={openProduct} className="w-full cursor-pointer text-left focus:outline-none">
+        <button type="button" onClick={openProduct} className="flex w-full flex-1 cursor-pointer flex-col text-left focus:outline-none">
           <div className="relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-5">
             <img
               src={image}
@@ -98,7 +98,7 @@ const ProductCard = ({ product, onAddToCart }) => {
         </button>
 
         {/* Separate isolated button node for actions */}
-        <div className="px-4 pb-4 sm:px-5">
+        <div className="mt-auto px-4 pb-4 sm:px-5">
           <button
             type="button"
             onClick={handleAddToCart}

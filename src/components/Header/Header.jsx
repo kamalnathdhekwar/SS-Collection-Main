@@ -142,8 +142,11 @@ function Header({ onViewChange }) {
           </button>
 
           <button onClick={() => { closeAllMenus(); navigate("/"); }} className="flex flex-col text-left focus:outline-none cursor-pointer group select-none flex-shrink-0">
-            <h1 className="text-base sm:text-2xl font-black tracking-tight text-neutral-900 uppercase">SS <span className="font-light text-neutral-500">Collection</span></h1>
-            <p className="text-[9px] sm:text-xs tracking-widest uppercase font-bold text-neutral-400 -mt-0.5 whitespace-nowrap">A Multibrand Store</p>
+            <div className="flex items-baseline gap-0.5">
+              <h1 className="text-xs sm:text-base font-black tracking-wide uppercase bg-gradient-to-r from-orange-500 via-orange-400 to-yellow-500 bg-clip-text text-transparent">SS</h1>
+              <h1 className="text-xs sm:text-base font-black tracking-wide uppercase bg-gradient-to-r from-red-500 via-orange-500 to-yellow-400 bg-clip-text text-transparent">Collection</h1>
+            </div>
+            <p className="text-[7px] sm:text-[9px] tracking-widest uppercase font-bold text-neutral-500 -mt-0.5 whitespace-nowrap">A Multibrand Store</p>
           </button>
 
           <div className="flex-1 min-w-0 order-3 md:order-none w-full md:w-auto flex-shrink-0 md:flex-shrink">
